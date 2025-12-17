@@ -1,0 +1,54 @@
+.actionButton {
+  border: 1px solid #ffffff !important;
+  color: #33333f !important;
+  background-color: #ffffff !important;
+}
+
+.dotsIcon {
+  color: #33333f !important;
+}
+
+.menu {
+  margin-top: 8px;
+}
+
+.menuPaper {
+  width: 368px !important;
+  min-height: 248px !important;
+  border-radius: 20px !important;
+  border: 1px solid #edf0f6 !important;
+  padding: 16px !important;
+  gap: 8px !important;
+  box-shadow: 0px 2px 20px 0px #d6d4f04d !important;
+  background-color: #ffffff !important;
+}
+
+.menuItem {
+  width: 336px !important;
+  height: 48px !important;
+  border-radius: 10px !important;
+  gap: 12px !important;
+  padding: 10px 8px !important;
+  margin-bottom: 8px !important;
+  font-family: "DM Sans", sans-serif !important;
+}
+
+.menuItem:last-child {
+  margin-bottom: 0 !important;
+}
+
+.menuItem:hover {
+  background-color: #f4f7fd !important;
+}
+
+.menuItem .MuiListItemIcon-root {
+  min-width: 24px !important;
+  color: #33333f !important;
+}
+
+.menuItem .MuiListItemText-primary {
+  font-family: "DM Sans", sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #33333f !important;
+}

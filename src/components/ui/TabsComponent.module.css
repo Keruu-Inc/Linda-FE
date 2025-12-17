@@ -1,0 +1,117 @@
+.tabs {
+  border-radius: 100px;
+  border: 1px solid #edf0f6;
+  gap: 4px;
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  box-shadow: 0px 2px 20px 0px #d6d4f04d;
+}
+
+.tabs .MuiTabs-indicator {
+  display: none !important;
+  background-color: #ffffff !important;
+}
+
+.tabs .MuiTabs-flexContainer {
+  gap: 4px;
+  height: 100%;
+  padding: 4px;
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+.tab {
+  text-transform: none !important;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: 0%;
+  color: #7f889a;
+  height: 48px;
+  border-radius: 100px;
+  padding: 8px 20px;
+  background-color: #ffffff;
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 0 1 auto;
+  min-width: fit-content;
+}
+
+.tab:hover {
+  background-color: #fafafa;
+}
+
+.tab.selected {
+  height: 48px;
+  border-radius: 100px;
+  padding: 8px 24px;
+  background-color: #33333f;
+  color: #fff !important;
+  font-weight: 600;
+  font-family: "DM Sans", sans-serif;
+  line-height: 140%;
+  letter-spacing: 0%;
+  text-transform: none !important;
+  flex: 0 0 auto;
+  white-space: nowrap !important;
+  min-width: fit-content;
+}
+
+.tab.selected:hover {
+  background-color: #33333f;
+}
+
+.tabs .MuiTab-root {
+  text-transform: none !important;
+  white-space: nowrap !important;
+}
+
+/* Responsive styles for ProfileTabs */
+@media (max-width: 768px) {
+  .tabs {
+    width: 100%;
+  }
+  
+  .tabs .MuiTabs-flexContainer {
+    gap: 2px;
+    padding: 3px;
+  }
+  
+  .tab {
+    font-size: 12px;
+    height: 36px;
+    padding: 6px 12px;
+    min-width: 0;
+    flex: 1;
+  }
+  
+  .tab.selected {
+    height: 36px;
+    padding: 6px 14px;
+    min-width: 0;
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .tabs .MuiTabs-flexContainer {
+    gap: 2px;
+    padding: 2px;
+  }
+  
+  .tab {
+    font-size: 11px;
+    height: 32px;
+    padding: 4px 8px;
+  }
+  
+  .tab.selected {
+    height: 32px;
+    padding: 4px 10px;
+  }
+}
