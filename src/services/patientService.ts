@@ -106,7 +106,7 @@ export const getPatients = async (
   }
 
   const response = await apiClient.get<ApiPatientResponse>(
-    `/test/patients?${queryParams.toString()}`
+    `/api/customer/patients?${queryParams.toString()}`
   );
   return response.data;
 };
@@ -114,7 +114,7 @@ export const getPatients = async (
 export const createPatient = async (
   data: CreatePatientRequest
 ): Promise<CreatePatientResponse> => {
-  const response = await apiClient.post("/test/patients", data);
+  const response = await apiClient.post("/api/patients", data);
   return response.data;
 };
 
@@ -122,11 +122,11 @@ export const reCertifyPatient = async (
   patientId: string,
   data: ReCertifyPatientRequest
 ): Promise<void> => {
-  await apiClient.put(`/test/patients/${patientId}/reCertify`, data);
+  await apiClient.put(`/api/patients/${patientId}/reCertify`, data);
 };
 
 export const pauseAllSequences = async (patientId: string): Promise<void> => {
-  await apiClient.put(`/test/patients/${patientId}/pauseAllSequences`, {});
+  await apiClient.put(`/api/patients/${patientId}/pauseAllSequences`, {});
 };
 
 

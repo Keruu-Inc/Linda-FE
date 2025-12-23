@@ -22,36 +22,36 @@ export interface DropdownResponse<T> {
 
 // API functions
 export const getGenders = async (): Promise<DropdownResponse<DropdownItem>> => {
-  const { data } = await apiClient.get('/test/genders');
+  const { data } = await apiClient.get('/api/genders');
   return data;
 };
 
 export const getDiagnoses = async (): Promise<DropdownResponse<DropdownItem>> => {
-  const { data } = await apiClient.get('/test/diagnosises');
+  const { data } = await apiClient.get('/api/diagnosises');
   return data;
 };
 
 export const getVeteranStatuses = async (): Promise<DropdownResponse<DropdownItem>> => {
-  const { data } = await apiClient.get('/test/veteranStatuses');
+  const { data } = await apiClient.get('/api/veteranStatuses');
   return data;
 };
 
 export const getBranches = async (): Promise<DropdownResponse<DropdownItem>> => {
-  const { data } = await apiClient.get('/test/branches');
+  const { data } = await apiClient.get('/api/branches');
   return data;
 };
 
 export const getContactMethods = async (): Promise<DropdownResponse<DropdownItem>> => {
-  const { data } = await apiClient.get('/test/contactMethods');
+  const { data } = await apiClient.get('/api/contactMethods');
   return data;
 };
 
 export const getPatientStatuses = async (): Promise<DropdownResponse<PatientStatus>> => {
-  const { data } = await apiClient.get('/test/patientStatuses');
+  const { data } = await apiClient.get('/api/patientStatuses');
   return data;
 };
 
 export const getPayerTypes = async (): Promise<DropdownResponse<DropdownItem>> => {
-  const { data } = await apiClient.get('/test/payerTypes');
+  const { data } = await apiClient.get('/api/payerTypes');
   return data;
 };
