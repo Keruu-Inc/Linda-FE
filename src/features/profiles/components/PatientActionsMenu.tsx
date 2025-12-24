@@ -13,6 +13,7 @@ import {
   DeleteOutline,
 } from "@mui/icons-material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./PatientsActionsMenu.module.css";
 import { ReCertifiedDialog } from "./ReCertifiedDialog";
 
@@ -25,6 +26,7 @@ export function PatientActionsMenu({
   patientId,
   onActionClick,
 }: PatientActionsMenuProps) {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [reCertifiedDialogOpen, setReCertifiedDialogOpen] = useState(false);
   const open = Boolean(anchorEl);
@@ -41,6 +43,9 @@ export function PatientActionsMenu({
   const handleAction = (action: string) => {
     if (action === "re-certify") {
       setReCertifiedDialogOpen(true);
+      handleClose();
+    } else if (action === "view") {
+      navigate(`/profile/${patientId}`);
       handleClose();
     } else {
       onActionClick(patientId, action);
