@@ -59,10 +59,10 @@
   font-family: "DM Sans", sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 12px !important;
+  font-size: 15px !important;
   line-height: 150%;
   letter-spacing: 0%;
-  color: #33333f;
+  color: #7F889A !important;
   background-color: transparent !important;
   border: none !important;
   border-bottom: none !important;
@@ -136,7 +136,7 @@
   .table {
     min-width: 800px;
   }
-  
+
   .headerCell,
   .dataCell {
     padding: 10px 12px;
@@ -149,17 +149,17 @@
     min-width: 700px;
     border-spacing: 0 8px;
   }
-  
+
   .headerCell {
     padding: 8px 10px;
     font-size: 11px !important;
   }
-  
+
   .dataCell {
     padding: 8px 10px;
     font-size: 13px;
   }
-  
+
   .dataRow {
     height: 50px;
   }
@@ -170,17 +170,17 @@
     min-width: 600px;
     border-spacing: 0 6px;
   }
-  
+
   .headerCell {
     padding: 6px 8px;
     font-size: 10px !important;
   }
-  
+
   .dataCell {
     padding: 6px 8px;
     font-size: 12px;
   }
-  
+
   .dataRow {
     height: 44px;
   }

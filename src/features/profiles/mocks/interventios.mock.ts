@@ -1,0 +1,100 @@
+import type { Intervention } from '../types';
+
+export const pendingInterventionsMock: Intervention[] = [
+    {
+        id: '1',
+        date: '2025-10-15',
+        time: '15:05:45',
+        callingProgram: 'Post Discharge',
+        type: 'Need Human',
+        description: 'Wants to speak with a human',
+        requiredInfo: '+1 (555) 489-4321',
+        reportIssue: '—',
+    },
+    {
+        id: '2',
+        date: '2025-10-15',
+        time: '15:05:44',
+        callingProgram: 'Post Discharge',
+        type: 'Adv. Symptoms',
+        description: 'Adverse symptoms detected',
+        requiredInfo: '—',
+        reportIssue: '—',
+    },
+    {
+        id: '3',
+        date: '2025-10-15',
+        time: '15:05:43',
+        callingProgram: 'Post Discharge',
+        type: 'Re-Cert',
+        description: 'Possible re-certification needed',
+        requiredInfo: '—',
+        reportIssue: 'Partial',
+    },
+];
+
+export const completedInterventionsMock: Intervention[] = [
+    {
+        id: '1',
+        date: '2025-11-10',
+        time: '11:20:10',
+        callingProgram: 'Post Discharge',
+        type: 'Adv. Symptoms',
+        description: 'Patient reported shortness of breath',
+        requiredInfo: '—',
+        reportIssue: '—',
+    },
+    {
+        id: '2',
+        date: '2025-11-09',
+        time: '16:45:30',
+        callingProgram: 'Post Discharge',
+        type: 'Need Human',
+        description: 'Requested callback from care team',
+        requiredInfo: '+1 (555) 332-1189',
+        reportIssue: '—',
+    },
+    {
+        id: '3',
+        date: '2025-11-08',
+        time: '09:12:55',
+        callingProgram: 'Post Discharge',
+        type: 'Re-Cert',
+        description: 'Re-certification eligibility check',
+        requiredInfo: '—',
+        reportIssue: 'Completed',
+    },
+];
+
+export const notRelevantInterventionsMock: Intervention[] = [
+    {
+        id: '1',
+        date: '2025-12-05',
+        time: '10:05:00',
+        callingProgram: 'Post Discharge',
+        type: 'Adv. Symptoms',
+        description: 'Critical symptoms escalation required',
+        requiredInfo: '—',
+        reportIssue: 'Escalated',
+    },
+    {
+        id: '2',
+        date: '2025-12-04',
+        time: '14:40:18',
+        callingProgram: 'Post Discharge',
+        type: 'Need Human',
+        description: 'Multiple failed automated contacts',
+        requiredInfo: '+1 (555) 901-7742',
+        reportIssue: '—',
+    },
+    {
+        id: '3',
+        date: '2025-12-03',
+        time: '08:55:42',
+        callingProgram: 'Post Discharge',
+        type: 'Re-Cert',
+        description: 'Re-certification expired',
+        requiredInfo: '—',
+        reportIssue: 'Partial',
+    },
+];

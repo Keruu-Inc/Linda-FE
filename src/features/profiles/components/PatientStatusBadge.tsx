@@ -6,6 +6,7 @@ interface AlertBadgeProps {
     severity: 'low' | 'medium' | 'high';
   };
   fullWidth?: boolean;
+  isIntervention?: boolean;
 }
 
 const alertColors: Record<string, { bg: string; color: string }> = {
@@ -17,8 +18,17 @@ const alertColors: Record<string, { bg: string; color: string }> = {
   'Adv. Symptoms': { bg: '#fff3e0', color: '#e65100' },
 };
 
-export function PatientStatusBadge({ alert, fullWidth = false }: AlertBadgeProps) {
-  const colors = alertColors[alert.type] || { bg: '#f5f5f5', color: '#666' };
+const patientStatusColors: Record<string, { bg: string; color: string }> = {
+  'Completed': { bg: '#09A0391A', color: '#09A039' },
+  'Partial': { bg: '#FEC8381A', color: '#FEC838' },
+};
+
+const interventionStatusColors: Record<string, { bg: string; color: string }> = {
+  'any': { bg: '#FEC8381A', color: '#FEC838' },
+};
+
+export function PatientStatusBadge({ alert, fullWidth = false, isIntervention = false }: AlertBadgeProps) {
+  const colors = (isIntervention ? interventionStatusColors['any'] : undefined) || alertColors[alert.type] || patientStatusColors[alert.type] || { bg: '#f5f5f5', color: '#666' };
 
   return (
     <Chip

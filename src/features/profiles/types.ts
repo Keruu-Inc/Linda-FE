@@ -58,3 +58,36 @@ export interface ApiPatient {
   };
   stateNote?: string;
 }
+
+
+export interface Report {
+  id: string;
+  date: string;
+  time: string;
+  callingProgram: string;
+  status: "Completed" | "Partial";
+  hasNotification?: boolean;
+}
+
+export interface Log {
+  id: string;
+  date: string;
+  time: string;
+  actionType: string;
+  description: string;
+  attempt: string;
+  result: string;
+  performedBy: string;
+}
+
+export interface Intervention {
+  id: string;
+  date: string;
+  time: string;
+  callingProgram: string;
+  type: string;
+  description: string;
+  requiredInfo: string;
+  reportIssue: string;
+  hasNotification?: boolean;
+}

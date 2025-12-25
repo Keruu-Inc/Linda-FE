@@ -6,6 +6,8 @@
   align-items: center;
   background-color: #ffffff;
   box-shadow: 0px 2px 20px 0px #d6d4f04d;
+  display: inline-flex;
+  width: fit-content;
 }
 
 .tabs .MuiTabs-indicator {
@@ -18,7 +20,7 @@
   height: 100%;
   padding: 4px;
   display: flex;
-  width: 100%;
+  width: auto;
   flex-wrap: nowrap;
 }
 
@@ -76,12 +78,12 @@
   .tabs {
     width: 100%;
   }
-  
+
   .tabs .MuiTabs-flexContainer {
     gap: 2px;
     padding: 3px;
   }
-  
+
   .tab {
     font-size: 12px;
     height: 36px;
@@ -89,7 +91,7 @@
     min-width: 0;
     flex: 1;
   }
-  
+
   .tab.selected {
     height: 36px;
     padding: 6px 14px;
@@ -103,13 +105,13 @@
     gap: 2px;
     padding: 2px;
   }
-  
+
   .tab {
     font-size: 11px;
     height: 32px;
     padding: 4px 8px;
   }
-  
+
   .tab.selected {
     height: 32px;
     padding: 4px 10px;

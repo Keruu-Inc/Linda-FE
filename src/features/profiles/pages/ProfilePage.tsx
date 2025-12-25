@@ -10,59 +10,272 @@ import {
   MenuItem,
   FormControl,
   Badge,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
 } from "@mui/material";
 import {
   ContentCopy,
   PersonOutline,
   ExpandMore,
-  Description,
-  WarningAmber,
+  ArticleOutlined as ArticleOutlinedIcon,
+  Error,
   ArrowBackIosNew,
+  PhoneOutlined,
+  MoreVert
 } from "@mui/icons-material";
-import { TabsComponent, type TabItem } from "../../../components/ui/TabsComponent";
+import { TabsComponent, type TabItem } from "@/components/ui/TabsComponent";
 import styles from "./ProfilePage.module.css";
+import tabStyles from "@/components/ui/TabsComponent.module.css";
+import { DataTable, type Column } from '@/components/ui/DataTable';
+import { PatientStatusBadge } from "../components/PatientStatusBadge";
+import type { Report, Log, Intervention } from "../types";
+import { mockReports } from "../mocks/reports.mock";
+import {
+  logs14DaysMock,
+  logs30DaysMock,
+  logs60DaysMock,
+} from '../mocks/logs.mock';
+
+import {
+  pendingInterventionsMock,
+  completedInterventionsMock,
+  notRelevantInterventionsMock,
+} from '../mocks/interventios.mock';
+
+const reportColumns: Column<Report>[] = [
+  {
+    id: "date",
+    label: "Date",
+    width: 120,
+    align: "left",
+  },
+  {
+    id: "time",
+    label: "Time",
+    width: 100,
+    align: "left",
+  },
+  {
+    id: "callingProgram",
+    label: "Calling Program",
+    width: 200,
+    align: "left",
+  },
+  {
+    id: "status",
+    label: "Status",
+    width: 120,
+    align: "left",
+    render: (report) => <PatientStatusBadge alert={{ type: report.status, severity: "low" }} />,
+  },
+  {
+    id: "report",
+    label: "Report",
+    width: 80,
+    align: "right",
+    render: (report) => (
+      <IconButton
+        size="small"
+        className={styles.reportButton}
+        onClick={(e) => {
+          e.stopPropagation();
+          console.log('report', report)
+        }}
+      >
+        {report.hasNotification ?
+          <Badge
+            badgeContent={'!'}
+            color="error"
+            sx={{
+              '& .MuiBadge-badge': {
+                fontSize: '10px',
+                height: 16,
+                minWidth: 16,
+                padding: '0 4px',
+              },
+            }}
+          >
+            <ArticleOutlinedIcon fontSize="small" className={styles.reportIcon} />
+          </Badge>
+          : <ArticleOutlinedIcon fontSize="small" className={styles.reportIcon} />
+        }
+
+      </IconButton>
+    ),
+  },
+];
+
+const logsColumns: Column<Log>[] = [
+  {
+    id: "date",
+    label: "Date",
+    width: 120,
+    align: "left",
+  },
+  {
+    id: "time",
+    label: "Time",
+    width: 100,
+    align: "left",
+  },
+  {
+    id: "actionType",
+    label: "Action Type",
+    width: 200,
+    align: "left",
+  },
+  {
+    id: "description",
+    label: "Description",
+    width: 200,
+    align: "left",
+  },
+  {
+    id: "attempt",
+    label: "Attempt #",
+    width: 100,
+    align: "left",
+  },
+  {
+    id: "result",
+    label: "Result",
+    width: 150,
+    align: "left",
+  },
+  {
+    id: "performedBy",
+    label: "Performed By",
+    width: 150,
+    align: "left",
+  },
+
+];
+
+const interventionsColumns: Column<Intervention>[] = [
+  {
+    id: "date",
+    label: "Date",
+    width: 120,
+    align: "left",
+  },
+  {
+    id: "time",
+    label: "Time",
+    width: 100,
+    align: "left",
+  },
+  {
+    id: "callingProgram",
+    label: "Calling Program",
+    width: 200,
+    align: "left",
+  },
+  {
+    id: "type",
+    label: "Type",
+    width: 200,
+    align: "left",
+    render: (intervention) => <PatientStatusBadge alert={{ type: intervention.type, severity: "low" }} isIntervention={true} />,
+  },
+  {
+    id: "description",
+    label: "Description",
+    width: 100,
+    align: "left",
+  },
+  {
+    id: "requiredInfo",
+    label: "Required Info",
+    width: 150,
+    align: "left",
+  },
+  {
+    id: "reportIssue",
+    label: "Report Issue",
+    width: 150,
+    align: "left",
+  },
+  {
+    id: "report",
+    label: "Report",
+    width: 80,
+    align: "right",
+    render: (report) => (
+      <IconButton
+        size="small"
+        className={styles.reportButton}
+        onClick={(e) => {
+          e.stopPropagation();
+          console.log('report', report)
+        }}
+      >
+        {report.hasNotification ?
+          <Badge
+            badgeContent={'!'}
+            color="error"
+            sx={{
+              '& .MuiBadge-badge': {
+                fontSize: '10px',
+                height: 16,
+                minWidth: 16,
+                padding: '0 4px',
+              },
+            }}
+          >
+            <ArticleOutlinedIcon fontSize="small" className={styles.reportIcon} />
+          </Badge>
+          : <ArticleOutlinedIcon fontSize="small" className={styles.reportIcon} />
+        }
+
+      </IconButton>
+    ),
+  },
+  {
+    id: "action",
+    label: "Action",
+    width: 80,
+    align: "right",
+    render: () => (
+      <IconButton
+        size="small"
+        className={styles.reportButton}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        <MoreVert fontSize="small" className={styles.reportIcon} />
+      </IconButton>
+    ),
+  },
+
+];
 
 type ProfileTabValue = "personal" | "reports" | "logs" | "interventions";
 
-interface Report {
-  id: string;
-  date: string;
-  time: string;
-  callingProgram: string;
-  status: "completed" | "partial";
-  hasNotification?: boolean;
-}
+type LogTabValue = "14Days" | "30Days" | "60Days";
 
-const mockReports: Report[] = [
-  {
-    id: "1",
-    date: "2025-10-15",
-    time: "15:05:45",
-    callingProgram: "Post Discharge Day 14",
-    status: "completed",
-  },
-  {
-    id: "2",
-    date: "2025-10-15",
-    time: "15:11:45",
-    callingProgram: "Post Discharge Day 30",
-    status: "partial",
-    hasNotification: true,
-  },
-  {
-    id: "3",
-    date: "2025-10-15",
-    time: "15:12:30",
-    callingProgram: "Post Discharge Day 60",
-    status: "completed",
-  },
+type InterventionTabValue = "pending" | "completed" | "notRelevant";
+
+const logsByTab: Record<LogTabValue, Log[]> = {
+  '14Days': logs14DaysMock,
+  '30Days': logs30DaysMock,
+  '60Days': logs60DaysMock,
+};
+
+const interventionsByTab: Record<InterventionTabValue, Intervention[]> = {
+  'pending': pendingInterventionsMock,
+  'completed': completedInterventionsMock,
+  'notRelevant': notRelevantInterventionsMock,
+};
+
+const logTabs: TabItem[] = [
+  { value: "14Days", label: "Post-Discharge 14 Days" },
+  { value: "30Days", label: "Post-Discharge 30 Days" },
+  { value: "60Days", label: "Post-Discharge 60 Days" },
+];
+
+const interventionTabs: TabItem[] = [
+  { value: "pending", label: "Pending Interventions" },
+  { value: "completed", label: "Completed" },
+  { value: "notRelevant", label: "Not Relevant" },
 ];
 
 const profileTabs: TabItem[] = [
@@ -76,55 +289,13 @@ export function ProfilePage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<ProfileTabValue>("reports");
   const [profileStatus, setProfileStatus] = useState("active");
+  const [activeLogTab, setActiveLogTab] = useState<LogTabValue>("14Days");
+  const [activeInterventionTab, setActiveInterventionTab] = useState<InterventionTabValue>("pending");
+  const logs = logsByTab[activeLogTab];
+  const interventions = interventionsByTab[activeInterventionTab];
 
   const handleCopyId = () => {
     navigator.clipboard.writeText("CS001");
-  };
-
-  const getStatusBadge = (status: "completed" | "partial") => {
-    if (status === "completed") {
-      return (
-        <Chip
-          label={
-            <span>
-              <span style={{ color: "#4caf50", fontSize: "0.75em", marginRight: "4px" }}>
-                •
-              </span>
-              Completed
-            </span>
-          }
-          size="small"
-          sx={{
-            bgcolor: "#e8f5e9",
-            color: "#33333f",
-            fontWeight: 500,
-            fontSize: "0.75rem",
-            height: 28,
-          }}
-        />
-      );
-    } else {
-      return (
-        <Chip
-          label={
-            <span>
-              <span style={{ color: "#ffc107", fontSize: "0.75em", marginRight: "4px" }}>
-                •
-              </span>
-              Partial
-            </span>
-          }
-          size="small"
-          sx={{
-            bgcolor: "#fff9c4",
-            color: "#33333f",
-            fontWeight: 500,
-            fontSize: "0.75rem",
-            height: 28,
-          }}
-        />
-      );
-    }
   };
 
   return (
@@ -134,19 +305,32 @@ export function ProfilePage() {
         <Box className={styles.headerLeft}>
           <IconButton
             onClick={() => navigate(-1)}
-            className={styles.backButton}
-            sx={{ mr: 1 }}
+            sx={{
+              backgroundColor: "#fff",
+              color: "#33333f",
+              border: "1px solid #edf0f6",
+              width: 48,
+              height: 48,
+              padding: 1,
+              "&:hover": {
+                backgroundColor: "#f4f7fd",
+              },
+              mr: 1,
+            }}
           >
-            <ArrowBackIosNew sx={{ fontSize: "16px !important" }} />
+            <ArrowBackIosNew sx={{ fontSize: 18 }} />
           </IconButton>
-          <Typography variant="h6" className={styles.headerTitle}>
+          <Typography variant="h5" className={styles.headerTitle}>
             Profile
           </Typography>
         </Box>
         <Box className={styles.upcomingSection}>
-          <Typography variant="body2" className={styles.upcomingLabel}>
-            Upcoming:
-          </Typography>
+          <Box sx={{ display: 'flex' }}>
+            <PhoneOutlined sx={{ fontSize: 20, color: "#7F889A", mr: 0.5 }} />
+            <Typography variant="body2" className={styles.upcomingLabel}>
+              Upcoming:
+            </Typography>
+          </Box>
           <Chip label="Post-Discharge 14 Days" size="small" className={styles.upcomingChip} />
           <Chip label="Call Attempt 2/4" size="small" className={styles.upcomingChip} />
           <Chip
@@ -158,158 +342,150 @@ export function ProfilePage() {
           <Chip label="12/15/2025" size="small" className={styles.upcomingChip} />
         </Box>
       </Box>
-        <Box className={styles.userInfoContainer}>
-            {/* User Information Section */}
-            <Box className={styles.userInfoSection}>
-                <Box className={styles.userInfoLeft}>
-                <Box className={styles.userIdSection}>
-                    <Typography variant="body2" className={styles.userIdLabel}>
-                    User: I.D.
-                    </Typography>
-                    <Chip
-                    label="CS001"
-                    size="small"
-                    icon={<ContentCopy sx={{ fontSize: "14px !important" }} />}
-                    onClick={handleCopyId}
-                    className={styles.userIdChip}
-                    sx={{
-                        bgcolor: "#f4f7fd",
-                        color: "#33333f",
-                        fontWeight: 500,
-                        fontSize: "0.875rem",
-                        height: 32,
-                        cursor: "pointer",
-                        "&:hover": {
-                        bgcolor: "#e8ecf5",
-                        },
-                    }}
-                    />
-                </Box>
-                <Typography variant="body2" className={styles.dischargeDate}>
-                    Discharge Date: 30/17/25 (Day: 30)
-                </Typography>
-                <Chip
-                    label="Manual Intervention Needed"
-                    size="small"
-                    sx={{
-                    bgcolor: "#fe9b38",
-                    color: "#fff",
-                    fontWeight: 500,
-                    fontSize: "0.75rem",
-                    height: 32
-                    }}
-                />
-                </Box>
-                <Box className={styles.profileStatusSection}>
-                <PersonOutline sx={{ fontSize: 20, color: "#7f889a", mr: 0.5 }} />
-                <Typography variant="body2" className={styles.profileStatusLabel}>
-                    Profile Status:
-                </Typography>
-                <FormControl size="small" sx={{ minWidth: 100, ml: 1 }}>
-                    <Select
-                    value={profileStatus}
-                    onChange={(e) => setProfileStatus(e.target.value)}
-                    IconComponent={ExpandMore}
-                    sx={{
-                        height: 32,
-                        fontSize: "0.875rem",
-                        "& .MuiOutlinedInput-notchedOutline": {
-                        border: "none",
-                        },
-                        "&:hover .MuiOutlinedInput-notchedOutline": {
-                        border: "none",
-                        },
-                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        border: "none",
-                        },
-                    }}
-                    >
-                    <MenuItem value="active">Active</MenuItem>
-                    <MenuItem value="inactive">Inactive</MenuItem>
-                    </Select>
-                </FormControl>
-                </Box>
+      <Box className={styles.userInfoContainer}>
+        {/* User Information Section */}
+        <Box className={styles.userInfoSection}>
+          <Box className={styles.userInfoLeft}>
+            <Box className={styles.userIdSection}>
+              <Typography variant="body2" className={styles.userIdLabel}>
+                User: I.D.
+              </Typography>
+              <Chip
+                label="CS001"
+                size="small"
+                icon={<ContentCopy sx={{ fontSize: "14px !important" }} />}
+                onClick={handleCopyId}
+                className={styles.userIdChip}
+                sx={{
+                  bgcolor: "#f4f7fd",
+                  color: "#33333f",
+                  fontWeight: 500,
+                  fontSize: "0.875rem",
+                  height: 32,
+                  cursor: "pointer",
+                  "&:hover": {
+                    bgcolor: "#e8ecf5",
+                  },
+                }}
+              />
             </Box>
+            <Typography variant="body2" className={styles.dischargeDate}>
+              Discharge Date: 30/17/25 (Day: 30)
+            </Typography>
+            <Chip
+              label="Manual Intervention Needed"
+              size="small"
+              sx={{
+                bgcolor: "#fe9b38",
+                color: "#fff",
+                fontWeight: 500,
+                fontSize: "0.75rem",
+                height: 32
+              }}
+            />
+          </Box>
+          <Box className={styles.profileStatusSection}>
+            <PersonOutline sx={{ fontSize: 20, color: "#7f889a", mr: 0.5 }} />
+            <Typography variant="body2" className={styles.profileStatusLabel}>
+              Profile Status:
+            </Typography>
+            <FormControl size="small" sx={{ minWidth: 100, ml: 1 }}>
+              <Select
+                value={profileStatus}
+                onChange={(e) => setProfileStatus(e.target.value)}
+                IconComponent={ExpandMore}
+                sx={{
+                  height: 32,
+                  fontSize: "0.875rem",
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
+                }}
+              >
+                <MenuItem value="active">Active</MenuItem>
+                <MenuItem value="inactive">Inactive</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Box>
 
-            {/* Navigation Tabs */}
-            <Box className={styles.tabsSection}>
+        {/* Navigation Tabs */}
+        <Box className={styles.tabsSection}>
+          <TabsComponent
+            simple
+            tabs={profileTabs}
+            value={activeTab}
+            onChange={(newValue) => setActiveTab(newValue as ProfileTabValue)}
+            tabsClassName={styles.profileTabs}
+            hideIndicator={false}
+          />
+          <Error
+            sx={{ fontSize: 18, color: "#FE9B38", ml: 1 }}
+          />
+        </Box>
+
+        {/* Content Section */}
+        <Box className={styles.contentSection}>
+          {activeTab === "reports" && (
+            <DataTable
+              columns={reportColumns}
+              rows={mockReports}
+              getRowId={(report) => report.id}
+            />
+          )}
+          {activeTab === "personal" && (
+            <Box className={styles.emptyState}>
+              <Typography variant="body1" color="text.secondary">
+                Personal
+              </Typography>
+            </Box>
+          )}
+          {activeTab === "logs" && (
+            <Box>
+              <Box display='flex' justifyContent='center'>
                 <TabsComponent
-                tabs={profileTabs}
-                value={activeTab}
-                onChange={(newValue) => setActiveTab(newValue as ProfileTabValue)}
-                tabsClassName={styles.profileTabs}
-                hideIndicator={false}
+                  tabs={logTabs}
+                  value={activeLogTab}
+                  onChange={(newValue) => setActiveLogTab(newValue as LogTabValue)}
+                  tabsClassName={tabStyles.tabs}
+                  tabClassName={tabStyles.tab}
+                  selectedTabClassName={tabStyles.selected}
+                  hideIndicator={true}
                 />
-                {activeTab === "interventions" && (
-                <WarningAmber
-                    sx={{ fontSize: 18, color: "#ff9800", ml: 1 }}
-                />
-                )}
+              </Box>
+              <DataTable
+                columns={logsColumns}
+                rows={logs}
+                getRowId={(log) => log.id}
+              />
             </Box>
-
-            {/* Content Section */}
-            <Box className={styles.contentSection}>
-                {activeTab === "reports" && (
-                <TableContainer component={Paper} className={styles.tableContainer}>
-                    <Table className={styles.reportsTable}>
-                    <TableHead>
-                        <TableRow className={styles.tableHeaderRow}>
-                        <TableCell className={styles.tableHeaderCell}>Date</TableCell>
-                        <TableCell className={styles.tableHeaderCell}>Time</TableCell>
-                        <TableCell className={styles.tableHeaderCell}>Calling Program</TableCell>
-                        <TableCell className={styles.tableHeaderCell}>Status</TableCell>
-                        <TableCell className={styles.tableHeaderCell} align="right">
-                            Report
-                        </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {mockReports.map((report) => (
-                        <TableRow key={report.id} className={styles.tableRow}>
-                            <TableCell className={styles.tableCell}>{report.date}</TableCell>
-                            <TableCell className={styles.tableCell}>{report.time}</TableCell>
-                            <TableCell className={styles.tableCell}>
-                            {report.callingProgram}
-                            </TableCell>
-                            <TableCell className={styles.tableCell}>
-                            {getStatusBadge(report.status)}
-                            </TableCell>
-                            <TableCell className={styles.tableCell} align="right">
-                            {report.hasNotification ? (
-                                <Badge badgeContent={1} color="error">
-                                <Description sx={{ color: "#7f889a", cursor: "pointer" }} />
-                                </Badge>
-                            ) : (
-                                <Description sx={{ color: "#7f889a", cursor: "pointer" }} />
-                            )}
-                            </TableCell>
-                        </TableRow>
-                        ))}
-                    </TableBody>
-                    </Table>
-                </TableContainer>
-                )}
-                {activeTab === "personal" && (
-                <Box className={styles.emptyState}>
-                    <Typography variant="body1" color="text.secondary">
-                    Personal information content
-                    </Typography>
-                </Box>
-                )}
-                {activeTab === "logs" && (
-                <Box className={styles.emptyState}>
-                    <Typography variant="body1" color="text.secondary">
-                    Logs content
-                    </Typography>
-                </Box>
-                )}
-                {activeTab === "interventions" && (
-                <Box className={styles.emptyState}>
-                    <Typography variant="body1" color="text.secondary">
-                    Manual Interventions content
-                    </Typography>
-                </Box>
-                )}
+          )}
+          {activeTab === "interventions" && (
+            <Box >
+              <Box display='flex' justifyContent='center'>
+                <TabsComponent
+                  tabs={interventionTabs}
+                  value={activeInterventionTab}
+                  onChange={(newValue) => setActiveInterventionTab(newValue as InterventionTabValue)}
+                  tabsClassName={tabStyles.tabs}
+                  tabClassName={tabStyles.tab}
+                  selectedTabClassName={tabStyles.selected}
+                  hideIndicator={true}
+                />
+              </Box>
+              <DataTable
+                columns={interventionsColumns}
+                rows={interventions}
+                getRowId={(intervention) => intervention.id}
+              />
+            </Box>
+          )}
         </Box>
       </Box>
     </Container>
