@@ -327,6 +327,7 @@
     justify-content: flex-start;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    border-radius: 100px;
   }
   
   .tabsContainer::-webkit-scrollbar {

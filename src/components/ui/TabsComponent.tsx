@@ -1,4 +1,6 @@
-import { Tabs, Tab, type TabsProps } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Tabs, Tab, Select, MenuItem, Box, type TabsProps } from "@mui/material";
+import styles from "./TabsComponent.module.css";
 
 export interface TabItem {
   value: string;
@@ -27,35 +29,99 @@ export function TabsComponent({
   simple = false,
   ...tabsProps
 }: TabsComponentProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  if (isMobile && !simple && tabs.length > 2) {
+    return (
+      <Select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={styles.mobileSelect}
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              bgcolor: 'background.paper',
+              marginTop: '4px',
+              borderRadius: '24px',
+              '& .MuiMenuItem-root': {
+                paddingY: '12px',
+                fontSize: '14px',
+              },
+            },
+          },
+          MenuListProps: {
+            sx: {
+              padding: 0,
+              backgroundColor: '#fff',
+            },
+          },
+       }}
+      >
+        {tabs.map((tab) => (
+          <MenuItem
+            key={tab.value}
+            value={tab.value}
+            className={`${styles.menuItem} ${value === tab.value ? styles.selectedMenuItem : ""}`}
+            sx={{
+
+            }}
+          >
+            {tab.label}
+          </MenuItem>
+        ))}
+      </Select>
+    );
+  }
+
+  if (simple) {
+    return (
+      <Box className={styles.simpleTabsWrapper}>
+        <Tabs
+          value={value}
+          onChange={(_, newValue) => onChange(newValue)}
+          className={styles.simpleTabs}
+          variant={isMobile ? "scrollable" : "standard"}
+          scrollButtons={false}
+          {...tabsProps}
+        >
+          {tabs.map((tab) => (
+            <Tab
+              key={tab.value}
+              value={tab.value}
+              label={tab.label}
+              className={styles.simpleTab}
+            />
+          ))}
+        </Tabs>
+      </Box>
+    );
+  }
+
   return (
     <Tabs
       value={value}
       onChange={(_, newValue) => onChange(newValue)}
       className={tabsClassName}
-      sx={
-        {
-          borderBottom: simple ? "none" : '1px solid #f4f4f4',
-          "& .MuiTabs-flexContainer": {
-            columnGap: simple ? "32px" : undefined,
-          },
-        }
-      }
-
+      sx={{
+        borderBottom: '1px solid #f4f4f4',
+        "& .MuiTabs-flexContainer": {
+          columnGap: undefined,
+        },
+      }}
       slotProps={
-        simple
-          ? {
-            indicator: {
-              sx: {
-                backgroundColor: "#716BEE",
-                height: 3,
-                borderTopLeftRadius: 3,
-                borderTopRightRadius: 3,
-              },
-            },
-          }
-          : hideIndicator
-            ? { indicator: { sx: { display: "none" } } }
-            : undefined
+        hideIndicator
+          ? { indicator: { sx: { display: "none" } } }
+          : undefined
       }
       {...tabsProps}
     >
@@ -64,21 +130,7 @@ export function TabsComponent({
           key={tab.value}
           value={tab.value}
           label={tab.label}
-          className={`${tabClassName || ""} ${value === tab.value ? selectedTabClassName || "" : ""
-            }`.trim()}
-          sx={
-            simple
-              ? {
-                textTransform: "none",
-                color: value === tab.value ? "#33333F" : "#7F889A",
-                fontWeight: 400,
-                fontSize: '15px',
-                "&.Mui-selected": {
-                  color: "#33333F",
-                },
-              }
-              : undefined
-          }
+          className={`${tabClassName || ""} ${value === tab.value ? selectedTabClassName || "" : ""}`.trim()}
         />
       ))}
     </Tabs>

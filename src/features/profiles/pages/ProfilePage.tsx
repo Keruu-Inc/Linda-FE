@@ -411,6 +411,7 @@ export function ProfilePage() {
             <Chip
               label="Manual Intervention Needed"
               size="small"
+              className={styles.interventionChip}
               sx={{
                 bgcolor: "#fe9b38",
                 color: "#fff",

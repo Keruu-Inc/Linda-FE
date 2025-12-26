@@ -22,6 +22,7 @@ export function SearchBar({
       sx={{
         "& .MuiOutlinedInput-root": {
           height: "48px",
+          fontSize: "16px",
         },
       }}
       slotProps={{
