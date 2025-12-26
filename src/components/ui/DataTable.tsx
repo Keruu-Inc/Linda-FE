@@ -25,6 +25,7 @@ interface DataTableProps<T> {
   rows: T[];
   onRowClick?: (row: T) => void;
   getRowId: (row: T) => string;
+  selectedRowId?: string | number | null;
 }
 
 export function DataTable<T>({
@@ -32,6 +33,7 @@ export function DataTable<T>({
   rows,
   onRowClick,
   getRowId,
+  selectedRowId,
 }: DataTableProps<T>) {
   const getCellStyle = (column: Column<T>) => {
     const style: React.CSSProperties = {};
@@ -55,7 +57,7 @@ export function DataTable<T>({
         }}
       >
         <TableHead>
-          <TableRow className={styles.headerRow}>
+          <TableRow hover className={styles.headerRow}>
             {columns.map((column) => (
               <TableCell
                 key={column.id}
@@ -68,27 +70,38 @@ export function DataTable<T>({
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={getRowId(row)}
-              className={styles.dataRow}
-              onClick={() => onRowClick?.(row)}
-            >
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  className={styles.dataCell}
-                  style={getCellStyle(column)}
-                >
-                  {column.render
-                    ? column.render(row)
-                    : ((row as Record<string, unknown>)[
+          {rows.map((row) => {
+            const rowId = getRowId(row);
+            const isSelected = rowId === selectedRowId;
+            return (
+              <TableRow
+                key={getRowId(row)}
+                className={styles.dataRow}
+                onClick={() => onRowClick?.(row)}
+                data-selected={isSelected}
+                sx={{
+                  "&:hover": {
+                    border: "1px solid #716BEE !important",
+                    zIndex: 20,
+                  }
+                }}
+              >
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    className={styles.dataCell}
+                    style={getCellStyle(column)}
+                  >
+                    {column.render
+                      ? column.render(row)
+                      : ((row as Record<string, unknown>)[
                         column.id
                       ] as React.ReactNode)}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
+                  </TableCell>
+                ))}
+              </TableRow>
+            )
+          })}
         </TableBody>
       </Table>
     </TableContainer>

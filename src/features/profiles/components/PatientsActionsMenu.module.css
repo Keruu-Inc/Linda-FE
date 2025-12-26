@@ -4,6 +4,15 @@
   background-color: #ffffff !important;
 }
 
+.actionButton:hover {
+  background-color: #f4f7fd !important;
+}
+
+.actionButtonActive {
+  background-color: #716BEE !important;
+  color: #ffffff !important;
+}
+
 .dotsIcon {
   color: #33333f !important;
 }

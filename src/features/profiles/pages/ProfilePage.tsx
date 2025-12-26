@@ -6,27 +6,29 @@ import {
   Typography,
   IconButton,
   Chip,
-  Select,
-  MenuItem,
-  FormControl,
   Badge,
+  Tooltip
 } from "@mui/material";
 import {
   ContentCopy,
   PersonOutline,
-  ExpandMore,
   ArticleOutlined as ArticleOutlinedIcon,
   Error,
   ArrowBackIosNew,
   PhoneOutlined,
-  MoreVert
+
 } from "@mui/icons-material";
+//components
 import { TabsComponent, type TabItem } from "@/components/ui/TabsComponent";
 import styles from "./ProfilePage.module.css";
-import tabStyles from "@/components/ui/TabsComponent.module.css";
-import { DataTable, type Column } from '@/components/ui/DataTable';
 import { PatientStatusBadge } from "../components/PatientStatusBadge";
+import InterventionTab from "../components/tabs/InterventionTab";
+import LogsTab from "../components/tabs/LogsTab";
+import ReportsTab from "../components/tabs/ReportsTab";
+import { handleCopy } from "@/utils/helpers";
+//data & types
 import type { Report, Log, Intervention } from "../types";
+import { type Column } from '@/components/ui/DataTable';
 import { mockReports } from "../mocks/reports.mock";
 import {
   logs14DaysMock,
@@ -38,7 +40,9 @@ import {
   pendingInterventionsMock,
   completedInterventionsMock,
   notRelevantInterventionsMock,
-} from '../mocks/interventios.mock';
+} from '../mocks/interventions.mock';
+import { SelectInput } from "@/components/inputs/SelectInput";
+import { InterventionActionsMenu } from "../components/InterventionActionsMenu";
 
 const reportColumns: Column<Report>[] = [
   {
@@ -165,20 +169,20 @@ const interventionsColumns: Column<Intervention>[] = [
   {
     id: "callingProgram",
     label: "Calling Program",
-    width: 200,
+    width: 100,
     align: "left",
   },
   {
     id: "type",
     label: "Type",
-    width: 200,
+    width: 100,
     align: "left",
     render: (intervention) => <PatientStatusBadge alert={{ type: intervention.type, severity: "low" }} isIntervention={true} />,
   },
   {
     id: "description",
     label: "Description",
-    width: 100,
+    width: 200,
     align: "left",
   },
   {
@@ -186,6 +190,43 @@ const interventionsColumns: Column<Intervention>[] = [
     label: "Required Info",
     width: 150,
     align: "left",
+    render: (intervention) => {
+      const value = intervention.requiredInfo;
+
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 0.5,
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Typography
+            variant="body2"
+            noWrap
+            sx={{ maxWidth: 120 }}
+          >
+            {value || "—"}
+          </Typography>
+
+          {value && value !== '—' && (
+            <Tooltip title="Copy">
+              <IconButton
+                size="small"
+                onClick={() => handleCopy(value)}
+                sx={{
+                  width: 24,
+                  height: 24,
+                }}
+              >
+                <ContentCopy fontSize="inherit" />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Box>
+      );
+    },
   },
   {
     id: "reportIssue",
@@ -230,29 +271,25 @@ const interventionsColumns: Column<Intervention>[] = [
   },
   {
     id: "action",
-    label: "Action",
+    label: "Actions",
     width: 80,
     align: "right",
     render: () => (
-      <IconButton
-        size="small"
-        className={styles.reportButton}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <MoreVert fontSize="small" className={styles.reportIcon} />
-      </IconButton>
+      <div onClick={(e) => e.stopPropagation()}>
+        <InterventionActionsMenu
+          onActionClick={(action) => console.log("Intervention action:", action)}
+        />
+      </div>
     ),
   },
 
 ];
 
-type ProfileTabValue = "personal" | "reports" | "logs" | "interventions";
+export type ProfileTabValue = "personal" | "reports" | "logs" | "interventions";
 
-type LogTabValue = "14Days" | "30Days" | "60Days";
+export type LogTabValue = "14Days" | "30Days" | "60Days";
 
-type InterventionTabValue = "pending" | "completed" | "notRelevant";
+export type InterventionTabValue = "pending" | "completed" | "notRelevant";
 
 const logsByTab: Record<LogTabValue, Log[]> = {
   '14Days': logs14DaysMock,
@@ -287,16 +324,15 @@ const profileTabs: TabItem[] = [
 
 export function ProfilePage() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<ProfileTabValue>("reports");
+  const [activeTab, setActiveTab] = useState<ProfileTabValue>("personal");
   const [profileStatus, setProfileStatus] = useState("active");
   const [activeLogTab, setActiveLogTab] = useState<LogTabValue>("14Days");
   const [activeInterventionTab, setActiveInterventionTab] = useState<InterventionTabValue>("pending");
+
   const logs = logsByTab[activeLogTab];
   const interventions = interventionsByTab[activeInterventionTab];
 
-  const handleCopyId = () => {
-    navigator.clipboard.writeText("CS001");
-  };
+
 
   return (
     <Container maxWidth={false} className={styles.contentContainer}>
@@ -354,7 +390,7 @@ export function ProfilePage() {
                 label="CS001"
                 size="small"
                 icon={<ContentCopy sx={{ fontSize: "14px !important" }} />}
-                onClick={handleCopyId}
+                onClick={() => handleCopy("CS001")}
                 className={styles.userIdChip}
                 sx={{
                   bgcolor: "#f4f7fd",
@@ -384,35 +420,17 @@ export function ProfilePage() {
               }}
             />
           </Box>
-          <Box className={styles.profileStatusSection}>
-            <PersonOutline sx={{ fontSize: 20, color: "#7f889a", mr: 0.5 }} />
-            <Typography variant="body2" className={styles.profileStatusLabel}>
-              Profile Status:
-            </Typography>
-            <FormControl size="small" sx={{ minWidth: 100, ml: 1 }}>
-              <Select
-                value={profileStatus}
-                onChange={(e) => setProfileStatus(e.target.value)}
-                IconComponent={ExpandMore}
-                sx={{
-                  height: 32,
-                  fontSize: "0.875rem",
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    border: "none",
-                  },
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    border: "none",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    border: "none",
-                  },
-                }}
-              >
-                <MenuItem value="active">Active</MenuItem>
-                <MenuItem value="inactive">Inactive</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+          <SelectInput
+            label="Profile Status:"
+            value={profileStatus}
+            onChange={setProfileStatus}
+            icon={<PersonOutline sx={{ fontSize: "24px", color: "#7F889A", mr: '1px' }} />}
+            options={[
+              { value: "active", label: "Active" },
+              { value: "reCertified", label: "Re-Certified" },
+              { value: "dissmissed", label: "Dismissed/Archived" },
+            ]}
+          />
         </Box>
 
         {/* Navigation Tabs */}
@@ -433,58 +451,29 @@ export function ProfilePage() {
         {/* Content Section */}
         <Box className={styles.contentSection}>
           {activeTab === "reports" && (
-            <DataTable
+            <ReportsTab
               columns={reportColumns}
               rows={mockReports}
-              getRowId={(report) => report.id}
             />
           )}
           {activeTab === "personal" && (
-            <Box className={styles.emptyState}>
-              <Typography variant="body1" color="text.secondary">
-                Personal
-              </Typography>
-            </Box>
+            <Typography variant="h6" className={styles.placeholderText}>
+              Personal Information Tab Content
+            </Typography>
           )}
           {activeTab === "logs" && (
-            <Box>
-              <Box display='flex' justifyContent='center'>
-                <TabsComponent
-                  tabs={logTabs}
-                  value={activeLogTab}
-                  onChange={(newValue) => setActiveLogTab(newValue as LogTabValue)}
-                  tabsClassName={tabStyles.tabs}
-                  tabClassName={tabStyles.tab}
-                  selectedTabClassName={tabStyles.selected}
-                  hideIndicator={true}
-                />
-              </Box>
-              <DataTable
-                columns={logsColumns}
-                rows={logs}
-                getRowId={(log) => log.id}
-              />
-            </Box>
+            <LogsTab
+              rows={logs}
+              columns={logsColumns}
+              logTabs={logTabs}
+              activeLogTab={activeLogTab}
+              setActiveLogTab={setActiveLogTab}
+            />
           )}
           {activeTab === "interventions" && (
-            <Box >
-              <Box display='flex' justifyContent='center'>
-                <TabsComponent
-                  tabs={interventionTabs}
-                  value={activeInterventionTab}
-                  onChange={(newValue) => setActiveInterventionTab(newValue as InterventionTabValue)}
-                  tabsClassName={tabStyles.tabs}
-                  tabClassName={tabStyles.tab}
-                  selectedTabClassName={tabStyles.selected}
-                  hideIndicator={true}
-                />
-              </Box>
-              <DataTable
-                columns={interventionsColumns}
-                rows={interventions}
-                getRowId={(intervention) => intervention.id}
-              />
-            </Box>
+            <Typography variant="h6" className={styles.placeholderText}>
+              Interventions
+            </Typography>
           )}
         </Box>
       </Box>

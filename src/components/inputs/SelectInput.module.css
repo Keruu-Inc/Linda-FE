@@ -1,0 +1,123 @@
+/* Ensure purple border when select is open (expanded) */
+.open {
+    border-color: #716bee !important;
+    background: #fff !important;
+}
+
+/* Trigger */
+.select {
+    border: 1px solid #EDF0F6;
+    padding: 10px 16px;
+    border-radius: 100px !important;
+    min-width: 312px;
+    height: 48px;
+    transition: border-color 0.2s ease;
+}
+
+
+.select:hover {
+    border-color: #716bee;
+}
+
+/* FOCUS / OPEN */
+
+/* FOCUS / OPEN */
+.select.Mui-focused,
+.select.Mui-expanded {
+    border-color: #716bee !important;
+    background: #fff !important;
+}
+
+.select fieldset {
+    border: none;
+}
+
+.select fieldset {
+    border: none;
+}
+
+.select .MuiSelect-icon {
+    transition: transform 0.2s ease;
+}
+
+.select.Mui-focused .MuiSelect-icon {
+    transform: rotate(180deg);
+}
+
+.trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.label {
+    font-weight: 400;
+    font-size: 16px;
+    color: #7F889A;
+}
+
+.labelContainer {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 1px;
+}
+
+.value {
+    font-size: 16px;
+    font-weight: 400;
+    color: #33333F;
+}
+
+/* Menu */
+.menuPaper {
+    border-radius: 20px !important;
+    padding: 7px 0px !important;
+    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.menuItem {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 12px 20px;
+    width: 100%;
+}
+
+.menuItem.MuiMenuItem-root.Mui-selected {
+    background-color: #fff !important;
+}
+
+.menuItem.Mui-selected:hover {
+    background-color: #fff !important;
+}
+
+.menuItem:hover:not(.Mui-selected) {
+    background-color: #f5f6ff;
+}
+
+.menuItemSelected {
+    background-color: white;
+}
+
+/* FORCE selected menu item to stay white */
+.menuItem.MuiButtonBase-root.Mui-selected {
+    background-color: #fff !important;
+}
+
+/* Selected + hover → still white */
+.menuItem.MuiButtonBase-root.Mui-selected:hover {
+    background-color: #fff !important;
+}
+
+
+
+.menuItemSelected {
+    color: #716bee;
+    background-color: #fff !important;
+    font-weight: 500;
+}
+
+.checkIcon {
+    color: #716bee;
+    font-size: 18px;
+}
